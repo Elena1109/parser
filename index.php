@@ -7,15 +7,15 @@ $pdo = new PDO("mysql: host=localhost; dbname=parser","root","");
     
 
 
-//$html = file_get_html('https://oboi.online.ua/windows/');
-//$array = $html->find('.inner a');
-//
-//foreach($array as $k=>$v){
-//  $l = "https://oboi.online.ua". $v->href;
-//  $link = $pdo->prepare("INSERT INTO pages (link) VALUES (?)");
-//  $link->bindParam(1,$l);
-//  $link->execute();
-//}
+$html = file_get_html('https://oboi.online.ua/windows/');
+$array = $html->find('.inner a');
+
+foreach($array as $k=>$v){
+  $l = "https://oboi.online.ua". $v->href;
+  $link = $pdo->prepare("INSERT INTO pages (link) VALUES (?)");
+  $link->bindParam(1,$l);
+  $link->execute();
+}
 
 $data = $pdo->prepare(" SELECT * FROM pages ");
 $data->execute();
@@ -31,4 +31,16 @@ $pages = $data->fetchAll();
         $img->execute();
         }
     }
+
+
+$data = $pdo->prepare("SELECT * FROM images");
+$data->execute();
+$links = $data->fetchAll();
+foreach($links as $k=>$v){
+  $code =   file_get_contents($v['link']);
+  file_put_contents(uniqid().".jpg",$code);
+    
+    
+}
+
 ?>
